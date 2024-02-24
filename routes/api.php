@@ -4,6 +4,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ResidentController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminLoginController;
+use App\Http\Controllers\ApartmentController;
+use App\Http\Controllers\BuildingController;
+use App\Http\Controllers\HouseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,4 +31,44 @@ Route::apiResource('residents', ResidentController::class)
 
 // managing admins
 Route::apiResource('admins', AdminController::class)
-    ->only(['store']);
+    ->only(['store', 'show', 'index', 'destroy', 'update']);
+    // ->middleware('auth:sanctum')
+
+
+// login & register admins
+Route::controller(AdminLoginController::class)
+    ->prefix('admin')
+    ->group(
+        function (){
+            // login admin account
+            Route::post('/login', 'login');
+
+            //we don't need to signup because only admins can create other admins
+
+            Route::get('/logoff', 'logoff');
+        });
+
+// managing buildings 
+Route::apiResource('buildings', BuildingController::class)
+    ->only(['index', 'update', 'destroy', 'show', 'store']);
+
+Route::apiResource('houses', HouseController::class)
+    ->only(['index', 'update', 'store', 'show', 'destroy']);
+
+Route::apiResource('apartments', ApartmentController::class)
+    ->only(['index', 'store']);
+
+//to update an apartment
+Route::put('/apartments/{building}/{floor}/{apartment}', [ApartmentController::class, 'update'] );
+
+//to delete an apartment
+Route::delete('/apartments/{building}/{floor}/{apartment}', [ApartmentController::class, 'destroy'] );
+
+// to get all apartments from a building
+Route::get('/apartments/{building}', [ApartmentController::class,'building_apartments'] );
+
+//to get all apartments from a building floor
+Route::get('/apartments/{building}/{floor}', [ApartmentController::class,'building_floor_apartments'] );
+
+//to get specific apartment from building floor
+Route::get('/apartments/{building}/{floor}/{apartment}', [ApartmentController::class,'apartment'] );

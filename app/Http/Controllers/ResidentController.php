@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\CreateResidentRequest;
 use App\Http\Requests\UpdateResidentRequest;
-use App\Models\Resident;
+use App\Models\User;
 
 class ResidentController extends Controller
 {
@@ -14,7 +14,9 @@ class ResidentController extends Controller
      */
     public function index()
     {
-        $residents = Resident::all();
+        $residents = User::where('role', 'user')
+            ->orWhere('role', 'both')
+            ->get();
 
         return response()->json($residents);
     }
@@ -35,20 +37,23 @@ class ResidentController extends Controller
         // in request we have the data we send through a form.
         $validate = $request->validated();
 
-        // $request->user()->create($validate); how work later
+        // $resident = $this->user()->create($validate);
 
-        $resident = Resident::create($validate);
+        $resident = User::create($validate);
 
-        return json_encode([ $resident]);
+        return response()->json(["status" => ($resident) ? "Success" : "Fail"]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $name)
+    public function show(string $email)
     {
         
-        $resident = Resident::firstWhere('name', $name);
+        $resident = User::where('email', $email)
+            ->where('role', 'user')
+            ->orWhere('role', 'both')
+            ->get();
 
         return json_encode([ $resident ]);
     }
@@ -64,12 +69,14 @@ class ResidentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateResidentRequest $request, string $name)
+    public function update(UpdateResidentRequest $request, string $email)
     {
+        $resident_id = User::where('role', 'user')
+        ->orWhere('role', 'both')
+        ->firstWhere('email', $email)
+        ->id;
 
-        $resident_id = Resident::firstWhere('name', $name)->id;
-
-        $updated = Resident::where('id', $resident_id)->update( $request->all() );
+        $updated = User::where('id', $resident_id)->update( $request->all() );
 
         return response()->json([ $updated ]);
     }
@@ -77,9 +84,12 @@ class ResidentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $name)
+    public function destroy(string $email)
     {
-        $resident = Resident::where('name', $name)->delete();
+        $resident = User::where('email', $email)
+            ->where('role', 'user')
+            ->orWhere('role','both')
+            ->delete();
 
         return response()->json( [ 'User deleted successfully.' ] );
     }

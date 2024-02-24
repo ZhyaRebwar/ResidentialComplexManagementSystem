@@ -4,9 +4,11 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+
 class CreateResidentRequest extends FormRequest
 {
 
+    
     /**
      * Indicates if the validator should stop on the first rule failure.
      *
@@ -19,6 +21,7 @@ class CreateResidentRequest extends FormRequest
      */
     public function authorize(): bool
     {
+        // $this->user
         return true;
     }
 
@@ -31,12 +34,13 @@ class CreateResidentRequest extends FormRequest
     {
         return [
             'name'=> 'string|required|min:3',
-            'email'=> 'string|required',
+            'email'=> 'string|required|unique:users',
             'email_verified_at'=>'nullable',
             'password'=> 'required|string|min:5',
             'phone_number'=> 'string|required',
             'age'=> 'numeric|required|min:15',
-            'job_title'=> 'required'
+            'job_title'=> 'required',
+            'role' => 'required|regex:/user/i',
         ];
     }
 }

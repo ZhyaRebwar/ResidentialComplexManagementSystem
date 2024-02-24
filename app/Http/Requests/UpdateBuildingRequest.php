@@ -4,10 +4,9 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateResidentRequest extends FormRequest
+class UpdateBuildingRequest extends FormRequest
 {
-
-     /**
+    /**
      * Indicates if the validator should stop on the first rule failure.
      *
      * @var bool
@@ -30,14 +29,7 @@ class UpdateResidentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'=> 'string|min:3',
-            'email'=> 'string|unique:users',
-            'email_verified_at'=>'nullable',
-            'password'=> 'string|min:5',
-            'phone_number'=> 'string',
-            'age'=> 'numeric|min:15',
-            'role'=> 'string|regex:/user/',
-            // 'job_title'=> ''
+            'name' => 'string|unique:buildings,name',
         ];
     }
 }

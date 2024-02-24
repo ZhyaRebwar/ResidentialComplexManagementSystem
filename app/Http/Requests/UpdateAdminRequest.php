@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateResidentRequest extends FormRequest
+class UpdateAdminRequest extends FormRequest
 {
 
      /**
@@ -13,7 +13,7 @@ class UpdateResidentRequest extends FormRequest
      * @var bool
      */
     protected $stopOnFirstFailure = true;
-    
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -36,7 +36,7 @@ class UpdateResidentRequest extends FormRequest
             'password'=> 'string|min:5',
             'phone_number'=> 'string',
             'age'=> 'numeric|min:15',
-            'role'=> 'string|regex:/user/',
+            'role'=> 'string|in:admin,both'
             // 'job_title'=> ''
         ];
     }
