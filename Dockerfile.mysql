@@ -1,0 +1,10 @@
+FROM mariadb:10.8.3
+
+# Set the default authentication plugin to mysql_native_password
+CMD ["--default-authentication-plugin=mysql_native_password"]
+
+# Environment variables
+ENV MYSQL_ROOT_PASSWORD=root
+
+# Expose MySQL port
+EXPOSE 3306
