@@ -20,10 +20,9 @@ class RoleSeeder extends Seeder
                 ->state(
                     ['user_id' => $user->id],
                 )
-                ->state(new Sequence(
-                    ['role' => 'resident'],
-                    ['role' => 'admin'],
-                ))
+                ->state(
+                    $user->id % 2 == 0 ? ['role' => 'resident'] : ['role' => 'admin'] 
+                )
                 ->create();
         });
     }
