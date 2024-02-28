@@ -8,6 +8,7 @@ use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\ApartmentController;
 use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\HouseController;
+use App\Http\Controllers\RoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,3 +73,10 @@ Route::get('/apartments/{building}/{floor}', [ApartmentController::class,'buildi
 
 //to get specific apartment from building floor
 Route::get('/apartments/{building}/{floor}/{apartment}', [ApartmentController::class,'apartment'] );
+
+//resource of roles
+Route::apiResource('roles', RoleController::class)
+        ->only(['index', 'update', 'show', 'store']);
+
+//to delete a users role
+Route::delete('/roles/{email}', [RoleController::class,'destroy'] );
