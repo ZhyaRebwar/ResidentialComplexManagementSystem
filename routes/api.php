@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ResidentController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\AdminLoginController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ApartmentController;
 use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\HouseController;
@@ -37,8 +37,7 @@ Route::apiResource('admins', AdminController::class)
 
 
 // login & register admins
-Route::controller(AdminLoginController::class)
-    ->prefix('admin')
+Route::controller(LoginController::class)
     ->group(
         function (){
             // login admin account
