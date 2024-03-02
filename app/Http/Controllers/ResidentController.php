@@ -14,9 +14,9 @@ class ResidentController extends Controller
      */
     public function index()
     {
-        $residents = User::where('role', 'user')
-            ->orWhere('role', 'both')
-            ->get();
+        $residents = User::join('roles', 'users.id', '=', 'roles.user_id')
+        ->where('role', 'resident')
+        ->get();
 
         return response()->json($residents);
     }

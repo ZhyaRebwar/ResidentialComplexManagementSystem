@@ -14,11 +14,11 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $admins = User::where('role', 'admin')
-            ->orWhere('role', 'both')
-            ->get();
+        $residents = User::join('roles', 'users.id', '=', 'roles.user_id')
+        ->where('role', 'admin')
+        ->get();
 
-        return response()->json($admins);
+        return response()->json($residents);
     }
 
     /**
