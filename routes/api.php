@@ -45,7 +45,7 @@ Route::controller(LoginController::class)
 
             //we don't need to signup because only admins can create other admins
 
-            Route::get('/logoff', 'logoff');
+            Route::get('/logoff', 'logoff')->middleware('auth:sanctum');
         });
 
 // managing buildings 
@@ -75,7 +75,8 @@ Route::get('/apartments/{building}/{floor}/{apartment}', [ApartmentController::c
 
 //resource of roles
 Route::apiResource('roles', RoleController::class)
-        ->only(['index', 'update', 'show', 'store']);
+        ->only(['index', 'update', 'show', 'store'])
+        ->middleware('auth:sanctum');
 
 //to delete a users role
 Route::delete('/roles/{email}', [RoleController::class,'destroy'] );
