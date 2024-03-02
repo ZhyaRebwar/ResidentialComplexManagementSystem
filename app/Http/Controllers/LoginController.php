@@ -26,15 +26,27 @@ class LoginController extends Controller
 
             return response()->json([
                 'status' => 'OK',
-                'Bearer-Token' => $token->plainTextToken,
+                'bearer_token' => $token->plainTextToken,
             ], 200);
         }else{
-            return response()->json(["status" => "Fail"], 401);
+            return response()->json([
+                "status" => "Fail to login check the email or password"]
+                , 401);
         }
     }
 
     public function logoff()
     {
-        return response()->json( "Loged off successfully.");
+        
+        $result = response()->json(Auth::user()->tokens->each->delete());
+        if($result){
+            return response()->json( 
+                ['Message' => "Logged off successfully"]
+                , 200);
+        }else{
+            return response()->json( 
+                ['Message' => "Couldn't Log off"]
+                , 401);
+        }
     }
 }
