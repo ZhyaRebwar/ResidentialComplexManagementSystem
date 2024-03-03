@@ -40,7 +40,7 @@ class CreateResidentRequest extends FormRequest
             'phone_number'=> 'string|required',
             'age'=> 'numeric|required|min:15',
             'job_title'=> 'required',
-            'role' => 'required|regex:/user/i',
+            'role' => 'required|regex:/resident/i',
         ];
     }
 }

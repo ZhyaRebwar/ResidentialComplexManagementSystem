@@ -37,7 +37,8 @@ class AdminController extends Controller
         $validate = $request->validated();
 
         // create a token
-        $token = $validate->createToken('admintoken')->plainTextToken;
+        $token = $validate->createToken('admintoken');
+        
 
         $admin = User::create($validate);
 

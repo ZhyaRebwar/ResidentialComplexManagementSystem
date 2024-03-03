@@ -6,9 +6,14 @@ use Illuminate\Http\Request;
 use App\Http\Requests\CreateResidentRequest;
 use App\Http\Requests\UpdateResidentRequest;
 use App\Models\User;
+use App\Models\Role;
+
+use App\Http\Controllers\ControllersTraits\CheckingResults;
 
 class ResidentController extends Controller
 {
+    use CheckingResults;
+
     /**
      * Display a listing of the resource.
      */
@@ -34,14 +39,29 @@ class ResidentController extends Controller
      */
     public function store(CreateResidentRequest $request)
     {
-        // in request we have the data we send through a form.
         $validate = $request->validated();
 
         // $resident = $this->user()->create($validate);
 
+        $role = $validate['role'];
+
+        unset($validate['role'] );
+
         $resident = User::create($validate);
 
-        return response()->json(["status" => ($resident) ? "Success" : "Fail"]);
+        $resident_id = $resident->id;
+
+        $add_role = Role::create(
+            ['role' => $role,
+             'user_id' => $resident_id,
+             ]
+        );
+
+        $this->checkingResults(
+        $add_role, 
+        'The user has been created successfully',
+        'The user has been failed to create'
+        );
     }
 
     /**
