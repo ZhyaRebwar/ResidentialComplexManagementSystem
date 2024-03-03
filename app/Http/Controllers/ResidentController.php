@@ -57,11 +57,13 @@ class ResidentController extends Controller
              ]
         );
 
-        $this->checkingResults(
+        $result = $this->checkingResults(
         $add_role, 
         'The user has been created successfully',
         'The user has been failed to create'
         );
+
+        return $result;
     }
 
     /**
