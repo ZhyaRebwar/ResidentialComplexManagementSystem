@@ -26,7 +26,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // when registered send request to user to create account!
-Route::apiResource('residents', ResidentController::class)
+Route::middleware('auth:sanctum')
+    ->apiResource('residents', ResidentController::class)
     ->only(['store', 'show', 'index', 'destroy', 'update']);
 
 

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 
 class CreateResidentRequest extends FormRequest
@@ -21,8 +22,20 @@ class CreateResidentRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // $this->user
-        return true;
+        if(Auth::check()){
+            $user = Auth::user();
+
+           // Check if the user has an "admin" role
+            $isAdmin = $user->roles()->where('role', 'admin')->exists();
+
+            if ($isAdmin) {
+                // User has admin role
+                return true;
+            }
+            }
+        return false;
+
+
     }
 
     /**

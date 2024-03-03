@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\CreateAdminRequest;
 use App\Http\Requests\UpdateAdminRequest;
 use App\Models\User;
+use App\Models\Role;
 
 class AdminController extends Controller
 {
@@ -36,18 +37,29 @@ class AdminController extends Controller
     {
         $validate = $request->validated();
 
-        // create a token
-        $token = $validate->createToken('admintoken');
-        
+        // $resident = $this->user()->create($validate);
 
-        $admin = User::create($validate);
+        $role = $validate['role'];
 
+        unset($validate['role'] );
 
-        return response()->json(
-            [
-                $admin
-            ], 201
+        $resident = User::create($validate);
+
+        $resident_id = $resident->id;
+
+        $add_role = Role::create(
+            ['role' => $role,
+             'user_id' => $resident_id,
+             ]
         );
+
+        $result = $this->checkingResults(
+        $add_role, 
+        'The user has been created successfully',
+        'The user has been failed to create'
+        );
+
+        return $result;
     }
 
     /**
