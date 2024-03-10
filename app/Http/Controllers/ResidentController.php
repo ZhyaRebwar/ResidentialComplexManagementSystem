@@ -134,51 +134,53 @@ class ResidentController extends Controller
                 'status' => 'success',
                 'message' => 'successfully retrieved user info' 
             ], 200);
-
-            //send them back.
         }
         else
         {
             return response()->json([
                 'status' => 'failed',
                 'message' => "couldn't retrieve user contents, please try again" 
-            ]);
+            ], 401);
         }
     }
 
     public function editProfileUser(UserUpdateProfileRequest $request)
     {
+        $request->only(['phone_number', 'job_title', 'password']);
+
         $values_validate = $request->validated();
+
 
         $values_validate['password'] = bcrypt($request->password);
 
         if(Auth::check())
         {   
-            //get the user id.
             $user_id = Auth::user()->id;
 
-            //get all the user contents
             $result = User::where('id', $user_id)
                 ->update($values_validate);
 
-            //send them back.
             if($result)
+            {
                 return response()->json([
                     'status' => 'success',
                     'message' => "The user content has been updated"                 
-                ]);
+                ], 200);
+            }
             else
-            return response()->json([
-                'status' => 'failed',
-                'message' => "The user content couldn't be updated"                 
-            ]);
+            {
+                return response()->json([
+                    'status' => 'failed',
+                    'message' => "The user content couldn't be updated"                 
+                ], 400);
+            }
         }
         else
         {
             return response()->json([
                 'status' => 'failed',
                 'message' => "authorization error, please try again" 
-            ]);
+            ], 401);
         }
     }
 }
