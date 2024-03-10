@@ -35,6 +35,7 @@ Route::middleware('auth:sanctum')
     ->prefix('residents')
     ->group( function () {
         Route::get('/self', 'user');
+        Route::put('/self/update', 'editProfileUser');
     });
 
 

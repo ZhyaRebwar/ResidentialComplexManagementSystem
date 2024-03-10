@@ -10,6 +10,7 @@ use App\Models\Role;
 
 use App\Http\Controllers\ControllersTraits\CheckingResults;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\user\UserUpdateProfileRequest;
 
 class ResidentController extends Controller
 {
@@ -117,6 +118,8 @@ class ResidentController extends Controller
         return response()->json( [ 'User deleted successfully.' ] );
     }
 
+
+    // for the users only
     public function user()
     {
 
@@ -138,9 +141,44 @@ class ResidentController extends Controller
         {
             return response()->json([
                 'status' => 'failed',
-                'message' => "couldn't retrieve user contents, please try again." 
+                'message' => "couldn't retrieve user contents, please try again" 
             ]);
         }
+    }
 
+    public function editProfileUser(UserUpdateProfileRequest $request)
+    {
+        $values_validate = $request->validated();
+
+        $values_validate['password'] = bcrypt($request->password);
+
+        if(Auth::check())
+        {   
+            //get the user id.
+            $user_id = Auth::user()->id;
+
+            //get all the user contents
+            $result = User::where('id', $user_id)
+                ->update($values_validate);
+
+            //send them back.
+            if($result)
+                return response()->json([
+                    'status' => 'success',
+                    'message' => "The user content has been updated"                 
+                ]);
+            else
+            return response()->json([
+                'status' => 'failed',
+                'message' => "The user content couldn't be updated"                 
+            ]);
+        }
+        else
+        {
+            return response()->json([
+                'status' => 'failed',
+                'message' => "authorization error, please try again" 
+            ]);
+        }
     }
 }

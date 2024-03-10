@@ -36,7 +36,6 @@ class UpdateResidentRequest extends FormRequest
             'password'=> 'string|min:5',
             'phone_number'=> 'string',
             'age'=> 'numeric|min:15',
-            'role'=> 'string|regex:/user/',
             // 'job_title'=> ''
         ];
     }
