@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Role;
 
 use App\Http\Controllers\ControllersTraits\CheckingResults;
+use Illuminate\Support\Facades\Auth;
 
 class ResidentController extends Controller
 {
@@ -69,15 +70,15 @@ class ResidentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $email)
+    public function show(string $user)
     {
         
-        $resident = User::where('email', $email)
-            ->where('role', 'user')
-            ->orWhere('role', 'both')
-            ->get();
+        // $resident = User::where('email', $email)
+        //     ->where('role', 'user')
+        //     ->orWhere('role', 'both')
+        //     ->get();
 
-        return json_encode([ $resident ]);
+        return json_encode([ $user ]);
     }
 
     /**
@@ -114,5 +115,32 @@ class ResidentController extends Controller
             ->delete();
 
         return response()->json( [ 'User deleted successfully.' ] );
+    }
+
+    public function user()
+    {
+
+        if(Auth::check())
+        {   
+            //get the user id.
+            $user = Auth::user();
+
+            //get all the user contents
+            return response()->json([
+                'user' => $user,
+                'status' => 'success',
+                'message' => 'successfully retrieved user info' 
+            ], 200);
+
+            //send them back.
+        }
+        else
+        {
+            return response()->json([
+                'status' => 'failed',
+                'message' => "couldn't retrieve user contents, please try again." 
+            ]);
+        }
+
     }
 }

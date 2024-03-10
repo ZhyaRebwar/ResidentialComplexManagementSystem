@@ -10,6 +10,7 @@ use App\Http\Requests\RoleRequests\DeleteRoleRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
+use Illuminate\Support\Facades\Auth;
 
 class RoleController extends Controller
 {
@@ -20,11 +21,33 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $role = Role::join('users', 'roles.user_id', '=', 'users.id')->get();
 
-        $result = $this->getMultipleOrOneValue($role);
+        $user_id = Auth::user()->id;
 
-        return response()->json( $result );
+        $roles = User::find($user_id)->roles()->get()->pluck('role')->toArray();
+
+
+        if( in_array('admin', $roles) )
+        {   
+            
+            // get user id
+
+            //check its role with if(for admin only)
+
+            //if true then get all users.
+
+            //show the result
+            $role = Role::join('users', 'roles.user_id', '=', 'users.id')->get();
+
+            $result = $this->getMultipleOrOneValue($role);
+
+            return response()->json( $result );
+        }
+        else
+        {
+            return response()->json([ 'Status' => 'failed', 'Message' => "The user can't do this operation." ]);
+        }
+        
     }
 
     /**

@@ -28,7 +28,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // when registered send request to user to create account!
 Route::middleware('auth:sanctum')
     ->apiResource('residents', ResidentController::class)
-    ->only(['store', 'show', 'index', 'destroy', 'update']);
+    ->only(['store', 'index', 'destroy', 'update']);
+
+Route::middleware('auth:sanctum')
+    ->controller(ResidentController::class)
+    ->prefix('residents')
+    ->group( function () {
+        Route::get('/self', 'user');
+    });
 
 
 // managing admins
