@@ -226,14 +226,14 @@ class ResidentController extends Controller
                 ['houses' => $houses,
                 'apartments' => $apartments],
                 'status' => 'success',
-                'message' => 'successfully retrieved user info' 
+                'message' => 'successfully retrieved residential properties of the user' 
             ], 200);
         }
         else
         {
             return response()->json([
                 'status' => 'failed',
-                'message' => "couldn't retrieve user contents, please try again" 
+                'message' => "couldn't retrieve residential properties of the user contents, please try again" 
             ], 401);
         }
     }
