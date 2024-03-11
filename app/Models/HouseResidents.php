@@ -15,9 +15,6 @@ class HouseResidents extends Model
         'resident_id',
     ];
 
-    protected $primaryKey = ['house_id', 'resident_id'];
-
-
     public function house_residents(): BelongsTo
     {
         return $this->belongsTo(User::class, 'resident_id');

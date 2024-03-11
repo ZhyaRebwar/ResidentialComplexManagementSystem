@@ -12,9 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('apartment_residents', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('apartment_id')->references('id')->on('apartments')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('resident_id')->references('id')->on('users')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->primary(['apartment_id','resident_id']);
+            $table->unique(['apartment_id','resident_id']);
             $table->timestamps();
         });
     }

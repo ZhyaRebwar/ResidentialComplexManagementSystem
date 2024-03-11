@@ -11,6 +11,8 @@ use App\Models\Role;
 use App\Http\Controllers\ControllersTraits\CheckingResults;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\user\UserUpdateProfileRequest;
+use App\Models\Apartment;
+use App\Models\House;
 
 class ResidentController extends Controller
 {
@@ -180,6 +182,58 @@ class ResidentController extends Controller
             return response()->json([
                 'status' => 'failed',
                 'message' => "authorization error, please try again" 
+            ], 401);
+        }
+    }
+
+    public function userResidentialProperty()
+    {
+        if(Auth::check())
+        {   
+            $user = Auth::user();
+
+            $houses_id = $user->house_residency_residents->map(function ($houses) {
+                return $houses['house_id'];
+            });
+
+            $houses = House::leftJoin('users', 'houses.owner_id', '=', 'users.id')
+                ->whereIn('houses.id', $houses_id)
+                ->select([
+                    'electricity_unit', 
+                    'houses.name as house_name', 
+                    'users.name as owner',
+                ])
+                ->get();
+
+            $apartments_id = $user->apartment_residency_residents->map(function ($apartment) {
+                return $apartment['apartment_id'];
+            });
+    
+            $apartments = Apartment::leftJoin('users', 'apartments.owner_id', '=', 'users.id')
+                ->leftJoin('buildings', 'apartments.building_id', '=', 'buildings.id')
+                ->whereIn('apartments.id', $apartments_id)
+                ->select([
+                    'electricity_unit', 
+                    'apartments.name as house_name', 
+                    'users.name as owner',
+                    'buildings.name as building_name',
+                    'floor',
+                ])
+                ->get();                
+
+            return response()->json([
+                'residential_properties' => 
+                ['houses' => $houses,
+                'apartments' => $apartments],
+                'status' => 'success',
+                'message' => 'successfully retrieved user info' 
+            ], 200);
+        }
+        else
+        {
+            return response()->json([
+                'status' => 'failed',
+                'message' => "couldn't retrieve user contents, please try again" 
             ], 401);
         }
     }
