@@ -8,6 +8,8 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ApartmentController;
 use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\HouseController;
+use App\Http\Controllers\Protest\ProtestController;
+use App\Http\Controllers\Protest\UserProtestController;
 use App\Http\Controllers\RoleController;
 
 /*
@@ -37,6 +39,13 @@ Route::middleware('auth:sanctum')
         Route::get('/self', 'user');
         Route::put('/self/update', 'editProfileUser');
         Route::get('/self/residential-property', 'userResidentialProperty');
+    });
+
+Route::controller(UserProtestController::class)
+    ->prefix('protests/user')
+    ->group( function () {
+        Route::get('', 'index');
+        Route::post('', 'store');
     });
 
 

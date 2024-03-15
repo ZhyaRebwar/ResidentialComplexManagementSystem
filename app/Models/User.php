@@ -75,4 +75,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Role::class, 'user_id');
     }
+
+    public function protest(): HasMany
+    {
+        return $this->hasMany(Protest::class, 'made_by');
+    }
 }
