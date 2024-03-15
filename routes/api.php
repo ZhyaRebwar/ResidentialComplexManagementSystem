@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Repairment\UserRepairmentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ResidentController;
@@ -48,6 +49,12 @@ Route::controller(UserProtestController::class)
         Route::post('', 'store');
     });
 
+Route::controller(UserRepairmentController::class)
+    ->prefix('repairments/user')
+    ->group( function () {
+        Route::get('', 'index');
+        Route::post('', 'store');
+    });
 
 // managing admins
 Route::apiResource('admins', AdminController::class)

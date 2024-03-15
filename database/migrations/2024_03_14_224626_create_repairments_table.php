@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->enum('repairment_components', ['pluming', 'electronic wires', 'electronic devices', 'indoor building'])->default('electronic wires');
+            $table->longText('description');
             $table->string('picture')->nullable();
             $table->enum('status', ['pending', 'rejected', 'approved', 'completed'])->default('pending');
             $table->timestamp('request_date');
@@ -22,7 +23,7 @@ return new class extends Migration
             $table->boolean('completed_user')->default(false);
             $table->timestamps();
             $table->foreignId('requested_by')->constrained('users');
-            $table->foreignId('accepted_by')->constrained('users');
+            $table->foreignId('accepted_by')->nullable()->constrained('users');
             $table->string('location'); //for this it will be like this type-id    => houses-23
         });
     }

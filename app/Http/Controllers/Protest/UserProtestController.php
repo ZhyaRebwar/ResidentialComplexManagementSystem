@@ -20,10 +20,9 @@ class UserProtestController extends Controller
 
     public function index()
     {
-        //get all the specific user protests   
         if(Auth::check())
         {
-            $user_protests = Auth::user()->protest;
+            $user_protests = Auth::user()->protests;
 
             return response()->json($user_protests);
         }

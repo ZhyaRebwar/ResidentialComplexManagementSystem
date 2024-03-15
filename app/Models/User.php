@@ -76,8 +76,13 @@ class User extends Authenticatable
         return $this->hasMany(Role::class, 'user_id');
     }
 
-    public function protest(): HasMany
+    public function protests(): HasMany
     {
         return $this->hasMany(Protest::class, 'made_by');
+    }
+
+    public function user_repairments(): HasMany
+    {
+        return $this->hasMany(Repairment::class, 'requested_by');
     }
 }
