@@ -15,12 +15,10 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         User::factory()
-            ->count(15)
-            ->state(new Sequence(
-                ['role'=> 'admin'],
-                ['role'=> 'user'],
-                ['role'=> 'both'],
-            ))
+            ->state([
+                'email' => 'messi@gmail.com',
+                'password' => 'messi12345'
+            ])
             ->create();    
     }
 }

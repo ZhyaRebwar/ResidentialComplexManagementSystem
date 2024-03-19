@@ -21,7 +21,7 @@ class RoleSeeder extends Seeder
                     ['user_id' => $user->id],
                 )
                 ->state(
-                    $user->id % 2 == 0 ? ['role' => 'resident'] : ['role' => 'admin'] 
+                    $user->id % 2 == 0 ? ['role' => 'admin'] : ['role' => 'resident'] 
                 )
                 ->create();
         });
