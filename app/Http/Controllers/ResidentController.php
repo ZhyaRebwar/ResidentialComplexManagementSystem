@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\user\UserUpdateProfileRequest;
 use App\Models\Apartment;
 use App\Models\House;
+use Illuminate\Support\Facades\DB;
 
 class ResidentController extends Controller
 {
@@ -51,6 +52,8 @@ class ResidentController extends Controller
 
         unset($validate['role'] );
 
+        DB::beginTransaction();
+
         $resident = User::create($validate);
 
         $resident_id = $resident->id;
@@ -60,6 +63,9 @@ class ResidentController extends Controller
              'user_id' => $resident_id,
              ]
         );
+
+        DB::commit();
+
 
         $result = $this->checkingResults(
         $add_role, 

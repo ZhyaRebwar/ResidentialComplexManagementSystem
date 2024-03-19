@@ -45,6 +45,7 @@ class ApartmentController extends Controller
 
         if(!is_null($apartment['building_id'] ))
             $building_exists = Building::where('id', $apartment['building_id'])->first();
+        
             if(is_null($building_exists))
                 return response()->json([ 
                 'Result' => 'Fail',

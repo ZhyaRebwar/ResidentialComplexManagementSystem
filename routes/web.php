@@ -14,7 +14,7 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::get('/', function () {
-    return json_encode(['came back to where you started.']);
-});
+// Route::get('/', function () {
+//     return json_encode(['came back to where you started.']);
+// });
 

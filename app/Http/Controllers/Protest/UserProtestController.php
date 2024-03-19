@@ -35,12 +35,15 @@ class UserProtestController extends Controller
         {
             $validate = $createProtestRequest->validated();
 
-            // in the request it must have a location containing type
+            $type = $validate['type'];
+            $property_id = $validate['property_id'];
+
+            $location = $type . '-' . $property_id;
 
             $protest = Protest::create([
                 ...$validate,
                 'made_by' => Auth::user()->id,
-                'location' => $validate['type'] . '-' . $validate['property_id']
+                'location' => $location,
             ]);
 
             $result = $this->checkingResults(

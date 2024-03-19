@@ -24,6 +24,10 @@ use App\Http\Controllers\RoleController;
 |
 */
 
+Route::get('/', function () {
+    return json_encode(['came back to where you started.']);
+});
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });

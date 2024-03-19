@@ -34,10 +34,15 @@ class UserRepairmentController extends Controller
         {
             $validate = $createRepairmentRequest->validated();
 
+            $type = $validate['type'];
+            $property_id = $validate['property_id'];
+
+            $location = $type . '-' . $property_id;
+
             $repairment = Repairment::create([
                 ...$validate,
                 'requested_by' => Auth::user()->id,
-                'location' => $validate['type'] . '-' . $validate['property_id'],
+                'location' => $location,
             ]);
 
             $result = $this->checkingResults(
