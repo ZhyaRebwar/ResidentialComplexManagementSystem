@@ -22,7 +22,7 @@ class LoginController extends Controller
         // Auth automatically hashes the password to check it with the one on database.
         if(Auth::attempt($validate) ){
             $user = Auth::user();
-            $token = $request->user()->createToken($user);
+            $token = $request->user()->createToken($user->name);
 
             return response()->json([
                 'status' => 'OK',
