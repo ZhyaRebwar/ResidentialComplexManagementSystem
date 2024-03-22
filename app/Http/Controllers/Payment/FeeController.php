@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ControllersTraits\CheckingResults;
 use App\Http\Controllers\ControllersTraits\GetValues;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class FeeController extends Controller
 {
@@ -37,10 +38,14 @@ class FeeController extends Controller
         {            
             $start_date = Carbon::now();
 
+            DB::beginTransaction();
+
             $fee = Fee::create([
                 ...$validate,
                 'start_date' => $start_date,
             ]);
+
+            DB::commit();
 
             $result = $this->checkingResults(
                 $fee,
