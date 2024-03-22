@@ -53,32 +53,32 @@ class PropertyFeesConroller extends Controller
                                         ->get()
                                         ->first();
                 
-                if( $property_fees )
+                if( !$property_fees )
                 {
                     // DB::beginTransaction();
 
-                    // $property_fees_create = PropertyFees::create([ 
-                    //     'fee_id' => $validate['fee_id'],
-                    //     'property' => $property,
-                    // ]);
+                    $property_fees_create = PropertyFees::create([ 
+                        'fee_id' => $validate['fee_id'],
+                        'property' => $property,
+                    ]);
 
                     //create the records till the end of the date...
-                    $fee_id = Fee::find( $validate['fee_id'] );
+                    // $fee_id = Fee::find( $validate['fee_id'] );
 
 
                     // DB::commit();
 
 
-                    // $result = $this->checkingResults(
-                    //     $property_fees_create,
-                    //     'The fee assigned to the property',
-                    //     'The fee could not be assigned to the fee'
-                    // );
+                    $result = $this->checkingResults(
+                        $property_fees_create,
+                        'The fee assigned to the property',
+                        'The fee could not be assigned to the fee'
+                    );
 
-                    return $fee_id;
+                    return $result;
                 } else
                 {
-                    return response()->json(['result' => 'Failed', 'Message' => 'The fee is already assigned to the property', $property_fees]);
+                    return response()->json(['result' => 'Failed', 'Message' => 'The fee is already assigned to the property']);
                 }
 
             } else 
