@@ -23,7 +23,7 @@ class CreateRepairmentRequest extends FormRequest
     {
         return [
             'title' => 'required',
-            'repairment_components' => 'required|in:pluming,electronic wires,electronic devices,indoor building',
+            'repairment_components' => 'required',
             'description' => 'required',
             'picture' => 'nullable',
             'type' => 'required|in:houses,apartments',
