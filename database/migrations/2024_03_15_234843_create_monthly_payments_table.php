@@ -11,6 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::disableForeignKeyConstraints();
+
         Schema::create('monthly_payments', function (Blueprint $table) {
             $table->id();
             $table->decimal('amount_paid', 10, 2);
@@ -22,6 +24,8 @@ return new class extends Migration
             $table->foreignId('paid_by')->constrained('users');
             $table->unique(['property_fee_id', 'payment_date',]);
         });
+
+        Schema::enableForeignKeyConstraints();
     }
 
     /**

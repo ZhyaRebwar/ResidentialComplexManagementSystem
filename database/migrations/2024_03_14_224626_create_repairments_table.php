@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('repairments', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->enum('repairment_components', ['pluming', 'electronic wires', 'electronic devices', 'indoor building'])->default('electronic wires');
+            $table->string('repairment_components')->default('electronic wires');
             $table->longText('description');
             $table->string('picture')->nullable();
             $table->enum('status', ['pending', 'rejected', 'approved', 'completed'])->default('pending');
