@@ -1,6 +1,7 @@
 import subprocess
 
 def database_setup():
+        subprocess.run(['php', 'artisan', 'migrate:rollback'], check=True)
         subprocess.run(['php', 'artisan', 'migrate'], check=True)
         subprocess.run(['php', 'artisan', 'db:seed'], check=True)
 
