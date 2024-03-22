@@ -12,7 +12,25 @@ trait GetValues
         } else 
         {
             $allValues = $model::all();
-            return $allValues;
+            if( !empty($allValues) )
+                return $allValues;
+            else
+                return ['result' => 'the table is empty'];
+        }
+    }
+
+    public function getValueId($model = null, $id = null)
+    {
+        if(is_null($model)) 
+        { 
+            return ['result' => 'no model added'];
+        } else 
+        {
+            $value = $model::find( $id );
+            if( !empty($value) )
+                return $value;
+            else
+                return ['result' => 'the table is empty'];
         }
     }
 
@@ -28,17 +46,5 @@ trait GetValues
             return $this->getMultipleOrOneValue($value);
 
         }
-    }
-
-    public function getMultipleOrOneValue($value)
-    {
-        if(count($value) == 1)
-            {
-                return $value[0];
-            }else
-            {
-                return $value;
-            }
-
     }
 }

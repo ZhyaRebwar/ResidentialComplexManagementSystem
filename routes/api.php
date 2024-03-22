@@ -9,6 +9,8 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ApartmentController;
 use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\HouseController;
+use App\Http\Controllers\Payment\FeeController;
+use App\Http\Controllers\Payment\PropertyFeesConroller;
 use App\Http\Controllers\Protest\ProtestController;
 use App\Http\Controllers\Protest\UserProtestController;
 use App\Http\Controllers\RoleController;
@@ -110,3 +112,17 @@ Route::apiResource('roles', RoleController::class)
 
 //to delete a users role
 Route::delete('/roles/{email}', [RoleController::class,'destroy'] );
+
+//fees
+Route::apiResource('fees', FeeController::class)
+        ->only(['index', 'store']);
+
+Route::apiResource('property-fees', PropertyFeesConroller::class)
+        ->only(['store']);
+
+//property fees controller
+Route::controller(PropertyFeesConroller::class)
+        ->prefix('payments')
+        ->group( function () {
+            Route::get('/house-payments', 'house_payments');
+        });

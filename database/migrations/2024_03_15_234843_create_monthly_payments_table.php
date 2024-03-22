@@ -18,9 +18,9 @@ return new class extends Migration
             $table->enum('payment_method', ['cash', 'fib'])->default('fib');
             $table->boolean('paid');
             $table->timestamps();
-            $table->foreignId('fee_id')->constrained('fees');
+            $table->foreignId('property_fee_id')->constrained('property_fees');
             $table->foreignId('paid_by')->constrained('users');
-            $table->unique(['fee_id', 'payment_date']);
+            $table->unique(['property_fee_id', 'payment_date',]);
         });
     }
 
