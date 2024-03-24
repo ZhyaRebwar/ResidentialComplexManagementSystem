@@ -16,13 +16,13 @@ return new class extends Migration
         Schema::create('monthly_payments', function (Blueprint $table) {
             $table->id();
             $table->decimal('amount_paid', 10, 2);
-            $table->date('payment_date')->format('Y-m')->between(date('Y-01-01'), date('Y-12-31'));
+            $table->date('payment_date')->nullable()->format('Y-m')->between(date('Y-01-01'), date('Y-12-31'));
             $table->enum('payment_method', ['cash', 'fib'])->default('fib');
-            $table->boolean('paid');
+            $table->boolean('is_paid')->default(0);
             $table->timestamps();
             $table->foreignId('property_fee_id')->constrained('property_fees');
-            $table->foreignId('paid_by')->constrained('users');
-            $table->unique(['property_fee_id', 'payment_date',]);
+            $table->foreignId('paid_by')->nullable()->constrained('users');
+            $table->unique(['property_fee_id', 'payment_date']);
         });
 
         Schema::enableForeignKeyConstraints();

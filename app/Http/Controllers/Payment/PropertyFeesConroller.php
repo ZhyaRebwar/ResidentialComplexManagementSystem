@@ -9,8 +9,6 @@ use App\Models\PropertyFees;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ControllersTraits\GetValues;
-use App\Models\Fee;
-use Illuminate\Support\Facades\DB;
 
 class PropertyFeesConroller extends Controller
 {
@@ -23,14 +21,6 @@ class PropertyFeesConroller extends Controller
 
     public function store(CreatePropertyFeeRequest $createPropertyFeeRequest)
     {
-        //when assigning a fee to a property
-            //1. make sure the property exists
-            //2. make sure they don't have this fee
-            //3. 
-        
-        //for each fee if end date exists create that much records for each month in the monthly payment to be paid
-            //1. in the monthly payment add description also make sure to be able to change the payment(bo peshaky para u sht)
-
         $validate = $createPropertyFeeRequest->validated();
 
         if(Auth::check())
@@ -55,19 +45,10 @@ class PropertyFeesConroller extends Controller
                 
                 if( !$property_fees )
                 {
-                    // DB::beginTransaction();
-
                     $property_fees_create = PropertyFees::create([ 
                         'fee_id' => $validate['fee_id'],
                         'property' => $property,
                     ]);
-
-                    //create the records till the end of the date...
-                    // $fee_id = Fee::find( $validate['fee_id'] );
-
-
-                    // DB::commit();
-
 
                     $result = $this->checkingResults(
                         $property_fees_create,

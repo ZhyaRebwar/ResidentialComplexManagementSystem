@@ -11,6 +11,7 @@ use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\HouseController;
 use App\Http\Controllers\Payment\FeeController;
 use App\Http\Controllers\Payment\PropertyFeesConroller;
+use App\Http\Controllers\Payment\UserMonthlyPaymentController;
 use App\Http\Controllers\Protest\ProtestController;
 use App\Http\Controllers\Protest\UserProtestController;
 use App\Http\Controllers\RoleController;
@@ -125,4 +126,12 @@ Route::controller(PropertyFeesConroller::class)
         ->prefix('payments')
         ->group( function () {
             Route::get('/house-payments', 'house_payments');
+        });
+
+//Monthly payment controller
+Route::controller(UserMonthlyPaymentController::class)
+        ->prefix('monthly-payments')
+        ->group( function () {
+            Route::get('/current-month', 'current_month');
+            Route::post('/current-month', 'pay_month_fee');
         });
