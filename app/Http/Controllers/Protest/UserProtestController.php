@@ -7,6 +7,8 @@ use App\Http\Controllers\ControllersTraits\CheckingResults;
 use App\Http\Requests\Protest\User\CreateProtestRequest;
 use Illuminate\Http\Request;
 use App\Models\Protest;
+use App\Models\Repairment;
+use App\Models\Role;
 use Illuminate\Support\Facades\Auth;
 
 class UserProtestController extends Controller
@@ -53,6 +55,44 @@ class UserProtestController extends Controller
             );
 
             return $result;
+        }
+    }
+
+    public function destroy(string $id)
+    {
+        if(Auth::check())
+        {
+            $role = Role::where('user_id', Auth::user()->id)->get();
+            //check if the role is for admin then delete
+            //if the role is for user they can delete only when the protest is not viewed.
+
+            if( in_array('resident', $role) )
+            {
+                $delete = Protest::where('id', $id)
+                                    ->where('is_viewed', false)
+                                    ->delete();
+
+                $result = $this->checkingResults(
+                    $delete,
+                    'The protest has been deleted',
+                    'Failed to delete the protest'
+                );
+    
+                return $result;                    
+            }
+            else
+            {
+                $delete = Protest::where('id', $id)->delete();
+
+                $result = $this->checkingResults(
+                    $delete,
+                    'The protest has been deleted',
+                    'Failed to delete the protest'
+                );
+    
+                return $result;
+            }
+  
         }
     }
 }

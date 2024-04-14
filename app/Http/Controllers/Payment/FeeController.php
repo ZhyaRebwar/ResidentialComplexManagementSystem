@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 
 class FeeController extends Controller
 {
-    use CheckingResults, GetValues;
+    use CheckingResults, GetValues, CheckingResults;
 
     public function __construct() 
     {
@@ -51,6 +51,22 @@ class FeeController extends Controller
                 $fee,
                 'The fee added successfully',
                 'Failed to make the fee'
+            );
+
+            return $result;
+        }
+    }
+
+    public function destroy(string $id)
+    {
+        if(Auth::check())
+        {
+            $delete = Fee::where('id', $id)->delete();
+
+            $result = $this->checkingResults(
+                $delete,
+                'The Fee deleted successfully',
+                'Failed to delete the fee'
             );
 
             return $result;

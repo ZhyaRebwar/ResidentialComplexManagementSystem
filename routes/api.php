@@ -14,6 +14,7 @@ use App\Http\Controllers\Payment\PropertyFeesConroller;
 use App\Http\Controllers\Payment\UserMonthlyPaymentController;
 use App\Http\Controllers\Protest\ProtestController;
 use App\Http\Controllers\Protest\UserProtestController;
+use App\Http\Controllers\Repairment\EmployeeRepairmentController;
 use App\Http\Controllers\RoleController;
 
 /*
@@ -49,19 +50,11 @@ Route::middleware('auth:sanctum')
         Route::get('/self/residential-property', 'userResidentialProperty');
     });
 
-Route::controller(UserProtestController::class)
-    ->prefix('protests/user')
-    ->group( function () {
-        Route::get('', 'index');
-        Route::post('', 'store');
-    });
+Route::apiResource('protests/user', UserProtestController::class)
+    ->only(['store', 'index', 'destroy', 'update']);
 
-Route::controller(UserRepairmentController::class)
-    ->prefix('repairments/user')
-    ->group( function () {
-        Route::get('', 'index');
-        Route::post('', 'store');
-    });
+Route::apiResource('repairments/user', UserRepairmentController::class)
+    ->only(['store', 'index', 'destroy', 'update']);
 
 // managing admins
 Route::apiResource('admins', AdminController::class)
@@ -116,10 +109,11 @@ Route::delete('/roles/{email}', [RoleController::class,'destroy'] );
 
 //fees
 Route::apiResource('fees', FeeController::class)
-        ->only(['index', 'store']);
+        ->only(['index', 'store', 'destroy']);
 
 Route::apiResource('property-fees', PropertyFeesConroller::class)
-        ->only(['store']);
+        ->only(['store', 'index', 'destroy', 'update']);
+Route::get('property-fees/property', [PropertyFeesConroller::class, 'property_fees']);
 
 //property fees controller
 Route::controller(PropertyFeesConroller::class)
@@ -133,5 +127,9 @@ Route::controller(UserMonthlyPaymentController::class)
         ->prefix('monthly-payments')
         ->group( function () {
             Route::get('/current-month', 'current_month');
+            Route::get('/all-months', 'all_months');
             Route::post('/current-month', 'pay_month_fee');
         });
+
+Route::apiResource('repairments/employee', EmployeeRepairmentController::class)
+        ->only(['index', 'update']);

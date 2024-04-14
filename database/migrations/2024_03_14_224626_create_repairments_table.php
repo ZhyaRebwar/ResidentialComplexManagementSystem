@@ -22,7 +22,7 @@ return new class extends Migration
             $table->timestamp('expiration_date')->nullable();
             $table->boolean('completed_user')->default(false);
             $table->timestamps();
-            $table->foreignId('requested_by')->constrained('users');
+            $table->foreignId('requested_by')->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('accepted_by')->nullable()->constrained('users');
             $table->string('location'); //for this it will be like this type-id    => houses-23
         });
@@ -33,11 +33,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('repairments', function (Blueprint $table) {
-            $table->dropForeign(['requested_by']);
-            $table->dropForeign(['accepted_by']);
-        });
-    
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('repairments');
+        Schema::enableForeignKeyConstraints();
     }
 };

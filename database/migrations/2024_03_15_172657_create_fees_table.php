@@ -15,8 +15,6 @@ return new class extends Migration
             $table->id();
             $table->decimal('amount', 10,2);
             $table->enum('fee_type', ['house fee', 'electricity', 'security', 'water', 'cleaning']);
-            $table->date('start_date');
-            $table->date('end_date')->nullable();
             $table->timestamps();
             $table->enum('property_type', ['houses', 'apartments']);
             $table->unique(['fee_type', 'property_type']);
@@ -28,6 +26,8 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('fees');
+        Schema::enableForeignKeyConstraints();
     }
 };

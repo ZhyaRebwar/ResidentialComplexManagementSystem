@@ -159,7 +159,14 @@ class ResidentController extends Controller
         $values_validate = $request->validated();
 
 
-        $values_validate['password'] = bcrypt($request->password);
+        if( $values_validate['password'] )
+        {
+            unset( $values_validate['password'] );
+        }
+        else
+        {
+            $values_validate['password'] = bcrypt($request->password);
+        }
 
         if(Auth::check())
         {   

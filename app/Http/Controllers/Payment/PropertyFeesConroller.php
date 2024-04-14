@@ -19,6 +19,16 @@ class PropertyFeesConroller extends Controller
         $this->middleware('auth:sanctum');
     }
 
+    public function index()
+    {
+        if(Auth::check())
+        {
+            $properties_fees = PropertyFees::all();
+
+            return response()->json($properties_fees);
+        }
+    }
+
     public function store(CreatePropertyFeeRequest $createPropertyFeeRequest)
     {
         $validate = $createPropertyFeeRequest->validated();
@@ -48,6 +58,8 @@ class PropertyFeesConroller extends Controller
                     $property_fees_create = PropertyFees::create([ 
                         'fee_id' => $validate['fee_id'],
                         'property' => $property,
+                        'start_date' => $validate['start_date'],
+                        'end_date' => $validate['end_date']
                     ]);
 
                     $result = $this->checkingResults(
@@ -78,6 +90,23 @@ class PropertyFeesConroller extends Controller
         
     }
 
+    public function update(Request $request, string $id)
+    {
+        $request->only(['property','property_id', 'start_date', 'end_date']);
+
+        $validate = $request->validate([]);
+
+        $update = PropertyFees::where('id', $id)->update($validate);
+
+        $result = $this->checkingResults(
+            $update,
+            'The property fee updated successfully',
+            'Failed to update the property fee'
+        );
+
+        return $result;
+    }
+
     //get all fees of all types of a specific house.
     public function house_payments(Request $request)
     {
@@ -94,6 +123,33 @@ class PropertyFeesConroller extends Controller
                     ->get();
 
             return response()->json($property_fee);
+        }
+    }
+
+    public function property_fees(Request $request)
+    {
+        if(Auth::check())
+        {
+            $property_fees = PropertyFees::where('property', $request->property . '-' . $request->property_id)
+                                            ->get();
+
+            return response()->json($property_fees);
+        }
+    }
+
+    public function destroy(string $id)
+    {
+        if(Auth::check())
+        {
+            $delete = PropertyFees::where('id', $id)->delete();
+
+            $result = $this->checkingResults(
+                $delete,
+                'The Property fee deleted successfully',
+                'Failed to delete the property fee'
+            );
+
+            return $result;
         }
     }
 }

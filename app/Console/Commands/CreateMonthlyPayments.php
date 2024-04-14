@@ -28,24 +28,28 @@ class CreateMonthlyPayments extends Command
      */
     public function handle()
     {
-        $feeIds = [1];
-
         $current_time = Carbon::now();
         $incompletePayments = PropertyFees::join('fees', 'property_fees.fee_id', '=', 'fees.id')
-                                ->where('fees.start_date', '<=', $current_time )
+                                ->where('property_fees.start_date', '<=', $current_time )
                                 ->where(function ($query) use ($current_time) {
-                                    $query->whereNull('fees.end_date')
-                                          ->orWhere('fees.end_date', '>', $current_time);
+                                    $query->whereNull('property_fees.end_date')
+                                          ->orWhere('property_fees.end_date', '>', $current_time);
                                 })
-                                ->whereIn('property_fees.fee_id', $feeIds)
                                 ->select('fees.*','property_fees.*')
                                 ->get();
 
 
         foreach($incompletePayments as $payments)
         {
+            $start_date = Carbon::parse($payments->start_date);
+            $end_date = Carbon::parse($payments->end_date);
+
+            $diffInMonths = $start_date->diffInMonths($end_date);
+
+            $payment_price = $payments->amount/$diffInMonths;
+
             MonthlyPayment::create([
-                'amount_paid' => 53431.21,
+                'amount_paid' => $payment_price,
                 'property_fee_id' => $payments->id,
             ]);
         }

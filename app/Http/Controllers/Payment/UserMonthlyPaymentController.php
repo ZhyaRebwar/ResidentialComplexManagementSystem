@@ -19,6 +19,20 @@ class UserMonthlyPaymentController extends Controller
         $this->middleware('auth:sanctum');
     }
 
+    public function all_months(Request $request)
+    {
+        $property = $request->property_type . '-' . $request->property_id;
+
+        $payments = MonthlyPayment::join('property_fees', 'monthly_payments.property_fee_id', '=', 'property_fees.id')
+                                    ->join('fees', 'property_fees.fee_id', '=', 'fees.id')
+                                    ->where('property', $property)
+                                    ->select('fees.*', 'property_fees.*', 'monthly_payments.*')
+                                    ->get();
+
+
+        return response()->json($payments);
+    }
+
     public function store (CreateMonthlyPaymentRequest $createMonthlyPaymentRequest)
     {
         $validate = $createMonthlyPaymentRequest->validated();
@@ -48,7 +62,7 @@ class UserMonthlyPaymentController extends Controller
 
         $payments = MonthlyPayment::join('property_fees', 'monthly_payments.property_fee_id', '=', 'property_fees.id')
                                     ->join('fees', 'property_fees.fee_id', '=', 'fees.id')
-                                    ->whereBetween('fees.start_date', [$currentMonthStart, $currentMonthEnd])
+                                    ->whereBetween('property_fees.start_date', [$currentMonthStart, $currentMonthEnd])
                                     ->where('property', $property)
                                     ->select('fees.*', 'property_fees.*', 'monthly_payments.*')
                                     ->get();
@@ -71,8 +85,9 @@ class UserMonthlyPaymentController extends Controller
 
             $payments = MonthlyPayment::join('property_fees', 'monthly_payments.property_fee_id', '=', 'property_fees.id')
                                         ->join('fees', 'property_fees.fee_id', '=', 'fees.id')
-                                        ->whereBetween('fees.start_date', [$currentMonthStart, $currentMonthEnd])
+                                        ->whereBetween('property_fees.start_date', [$currentMonthStart, $currentMonthEnd])
                                         ->where('property', $property)
+                                        ->where('monthly_payments.id', $request->monthly_payment)
                                         ->select('fees.*', 'property_fees.*', 'monthly_payments.*')
                                         ->update([
                                             'payment_date' => Carbon::now(),

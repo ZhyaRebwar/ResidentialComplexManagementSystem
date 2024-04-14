@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('picture')->nullable();
             $table->enum('status',['pending', 'rejected', 'approved', 'completed'])->default('pending');
             $table->timestamps();
-            $table->foreignId('made_by')->constrained('users');
+            $table->foreignId('made_by')->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('location'); //for this it will be like this type-id    => houses-23
         });
     }
@@ -29,10 +29,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('protests', function (Blueprint $table) {
-            $table->dropForeign(['made_by']);
-        });
-
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('protests');
+        Schema::enableForeignKeyConstraints();
     }
 };

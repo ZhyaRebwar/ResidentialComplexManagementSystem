@@ -12,5 +12,7 @@ class PropertyFees extends Model
     protected $fillable = [
         'fee_id',
         'property',
+        'start_date',
+        'end_date'
     ];
 }

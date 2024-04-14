@@ -12,8 +12,6 @@ class Fee extends Model
     protected $fillable = [
         'amount',
         'fee_type',
-        'start_date',
-        'end_date',
         'property_type',
     ];
 }

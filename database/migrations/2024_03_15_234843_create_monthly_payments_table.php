@@ -20,8 +20,8 @@ return new class extends Migration
             $table->enum('payment_method', ['cash', 'fib'])->default('fib');
             $table->boolean('is_paid')->default(0);
             $table->timestamps();
-            $table->foreignId('property_fee_id')->constrained('property_fees');
-            $table->foreignId('paid_by')->nullable()->constrained('users');
+            $table->foreignId('property_fee_id')->constrained('property_fees')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('paid_by')->nullable()->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
             $table->unique(['property_fee_id', 'payment_date']);
         });
 
@@ -33,6 +33,8 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('monthly_payments');
+        Schema::enableForeignKeyConstraints();
     }
 };

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\ControllersTraits\CheckingResults;
 use App\Http\Requests\Repairment\User\CreateRepairmentRequest;
 use App\Models\Repairment;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -52,6 +53,45 @@ class UserRepairmentController extends Controller
             );
 
             return $result;
+        }
+    }
+
+    public function destroy(string $id)
+    {
+        if(Auth::check())
+        {
+            $role = Role::where('user_id', Auth::user()->id)->get();
+            //check if the role is for admin then delete
+            //if the role is for user they can delete only when the repairment is not viewed.
+
+            
+
+            if( in_array('resident', $role) )
+            {
+                $delete = Repairment::where('id', $id)
+                                    ->where('is_viewed', false)
+                                    ->delete();
+
+                $result = $this->checkingResults(
+                    $delete,
+                    'The repairment has been deleted',
+                    'Failed to delete the repairment'
+                );
+    
+                return $result;                    
+            }
+            else
+            {
+                $delete = Repairment::where('id', $id)->delete();
+
+                $result = $this->checkingResults(
+                    $delete,
+                    'The repairment has been deleted',
+                    'Failed to delete the repairment'
+                );
+
+                return $result;
+            }
         }
     }
 }
