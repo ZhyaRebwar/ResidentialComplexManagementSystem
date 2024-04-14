@@ -132,4 +132,4 @@ Route::controller(UserMonthlyPaymentController::class)
         });
 
 Route::apiResource('repairments/employee', EmployeeRepairmentController::class)
-        ->only(['index', 'update']);
+        ->only(['index', 'update', 'destroy']);

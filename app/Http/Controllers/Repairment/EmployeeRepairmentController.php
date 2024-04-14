@@ -75,6 +75,14 @@ class EmployeeRepairmentController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $delete = Repairment::where('id', $id)->delete();
+
+        $result = $this->checkingResults(
+            $delete,
+            'The repairment deleted successfully',
+            'Failed to delete the repairment'
+        );
+
+        return $result;
     }
 }

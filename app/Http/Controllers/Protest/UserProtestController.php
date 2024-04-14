@@ -58,6 +58,49 @@ class UserProtestController extends Controller
         }
     }
 
+    public function update(Request $request, string $id)
+    {
+        // $request->only([])
+
+        $validate = $request->validate([]);
+
+        if(Auth::check())
+        {
+            $role = Role::where('user_id', Auth::user()->id)->get();
+            //check if the role is for admin then delete
+            //if the role is for user they can delete only when the protest is not viewed.
+
+            
+
+            if( in_array('resident', $role) )
+            {
+                $delete = Protest::where('id', $id)
+                                    ->where('is_viewed', false)
+                                    ->update($validate);
+
+                $result = $this->checkingResults(
+                    $delete,
+                    'The protest has been updated successfully',
+                    'Failed to update the protest'
+                );
+    
+                return $result;                    
+            }
+            else
+            {
+                $delete = Protest::where('id', $id)->update($validate);
+
+                $result = $this->checkingResults(
+                    $delete,
+                    'The protest has been updated successfully',
+                    'Failed to update the protest'
+                );
+
+                return $result;
+            }
+        }   
+    }
+
     public function destroy(string $id)
     {
         if(Auth::check())

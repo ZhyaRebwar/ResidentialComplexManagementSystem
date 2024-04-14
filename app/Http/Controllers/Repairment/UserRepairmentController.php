@@ -56,6 +56,49 @@ class UserRepairmentController extends Controller
         }
     }
 
+    public function update(Request $request, string $id)
+    {
+        // $request->only([])
+
+        $validate = $request->validate([]);
+
+        if(Auth::check())
+        {
+            $role = Role::where('user_id', Auth::user()->id)->get();
+            //check if the role is for admin then delete
+            //if the role is for user they can delete only when the repairment is not viewed.
+
+            
+
+            if( in_array('resident', $role) )
+            {
+                $delete = Repairment::where('id', $id)
+                                    ->where('is_viewed', false)
+                                    ->update($validate);
+
+                $result = $this->checkingResults(
+                    $delete,
+                    'The repairment has been updated successfully',
+                    'Failed to update the repairment'
+                );
+    
+                return $result;                    
+            }
+            else
+            {
+                $delete = Repairment::where('id', $id)->update($validate);
+
+                $result = $this->checkingResults(
+                    $delete,
+                    'The repairment has been updated successfully',
+                    'Failed to update the repairment'
+                );
+
+                return $result;
+            }
+        }   
+    }
+
     public function destroy(string $id)
     {
         if(Auth::check())
