@@ -47,4 +47,16 @@ trait GetValues
 
         }
     }
+
+    public function getMultipleOrOneValue($value)
+    {
+        if(count($value) == 1)
+            {
+                return $value[0];
+            }else
+            {
+                return $value;
+            }
+
+    }
 }
