@@ -61,7 +61,7 @@ class EmployeeRepairmentController extends Controller
 
         $update = Repairment::where('id', $id)->update(['status' => $request->status]);
 
-        $result = $this->checkingResult(
+        $result = $this->checkingResults(
             $update,
             'The status has been updated',
             'Failed to update the status'
