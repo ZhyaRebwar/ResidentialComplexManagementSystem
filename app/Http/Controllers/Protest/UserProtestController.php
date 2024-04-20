@@ -105,7 +105,7 @@ class UserProtestController extends Controller
     {
         if(Auth::check())
         {
-            $role = Role::where('user_id', Auth::user()->id)->get();
+            $role = Role::where('user_id', Auth::user()->id)->get()->pluck(['role'])->toArray();
             //check if the role is for admin then delete
             //if the role is for user they can delete only when the protest is not viewed.
 

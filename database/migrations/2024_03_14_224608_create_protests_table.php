@@ -18,6 +18,7 @@ return new class extends Migration
             $table->enum('compliant',['outdoor', 'indoor'])->default('indoor');
             $table->string('picture')->nullable();
             $table->enum('status',['pending', 'rejected', 'approved', 'completed'])->default('pending');
+            $table->boolean('is_viewed')->default(false);
             $table->timestamps();
             $table->foreignId('made_by')->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('location'); //for this it will be like this type-id    => houses-23
