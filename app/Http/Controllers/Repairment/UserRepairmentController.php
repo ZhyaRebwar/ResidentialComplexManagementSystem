@@ -103,11 +103,9 @@ class UserRepairmentController extends Controller
     {
         if(Auth::check())
         {
-            $role = Role::where('user_id', Auth::user()->id)->get();
+            $role = Role::where('user_id', Auth::user()->id)->get()->pluck(['role'])->toArray();
             //check if the role is for admin then delete
             //if the role is for user they can delete only when the repairment is not viewed.
-
-            
 
             if( in_array('resident', $role) )
             {
@@ -118,7 +116,7 @@ class UserRepairmentController extends Controller
                 $result = $this->checkingResults(
                     $delete,
                     'The repairment has been deleted',
-                    'Failed to delete the repairment'
+                    'Failed to delete the repairment as it was viewed by the employees.'
                 );
     
                 return $result;                    

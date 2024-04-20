@@ -21,6 +21,7 @@ return new class extends Migration
             $table->timestamp('request_date');
             $table->timestamp('expiration_date')->nullable();
             $table->boolean('completed_user')->default(false);
+            $table->boolean('is_viewed')->default(false);
             $table->timestamps();
             $table->foreignId('requested_by')->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
             $table->foreignId('accepted_by')->nullable()->constrained('users');
