@@ -30,14 +30,8 @@ class RoleController extends Controller
         if( in_array('admin', $roles) )
         {   
             
-            // get user id
-
-            //check its role with if(for admin only)
-
-            //if true then get all users.
-
-            //show the result
-            $role = Role::join('users', 'roles.user_id', '=', 'users.id')->get();
+            // $role = Role::join('users', 'roles.user_id', '=', 'users.id')->get();
+            $role = User::with('roles')->get();
 
             $result = $this->getMultipleOrOneValue($role);
 
