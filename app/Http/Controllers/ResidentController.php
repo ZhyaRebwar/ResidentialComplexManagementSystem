@@ -81,8 +81,6 @@ class ResidentController extends Controller
     {
         $resident = User::find($id);
 
-        $resident['roles'] = $resident->roles()->pluck('role');
-
         return response()->json($resident);
     }
 
@@ -113,14 +111,17 @@ class ResidentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $email)
+    public function destroy(string $id)
     {
-        $resident = User::where('email', $email)
-            ->where('role', 'user')
-            ->orWhere('role','both')
-            ->delete();
+        $resident = User::find($id)->delete();
 
-        return response()->json( [ 'User deleted successfully.' ] );
+        $result = $this->checkingResults(
+            $resident,
+            'The user deleted successfully',
+            'Failed to delete the user'
+        );
+
+        return response()->json( $result);
     }
 
 
@@ -156,14 +157,14 @@ class ResidentController extends Controller
         $values_validate = $request->validated();
 
 
-        if( $values_validate['password'] )
-        {
-            unset( $values_validate['password'] );
-        }
-        else
-        {
-            $values_validate['password'] = bcrypt($request->password);
-        }
+        // if( $values_validate['password'] )
+        // {
+        //     unset( $values_validate['password'] );
+        // }
+        // else
+        // {
+        $values_validate['password'] = bcrypt($request->password);
+        // }
 
         if(Auth::check())
         {   

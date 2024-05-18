@@ -32,14 +32,14 @@ Route::get('/', function () {
     return json_encode(['came back to where you started.']);
 });
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 // when registered send request to user to create account!
 Route::middleware('auth:sanctum')
     ->apiResource('residents', ResidentController::class)
-    ->only(['store', 'index', 'destroy', 'update']);
+    ->only(['store','show', 'index', 'destroy', 'update']);
 
 // managing admins
 Route::apiResource('admins', AdminController::class)
