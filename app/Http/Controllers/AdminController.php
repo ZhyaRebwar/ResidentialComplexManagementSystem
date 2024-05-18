@@ -2,24 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\ControllersTraits\CheckingResults;
 use Illuminate\Http\Request;
 use App\Http\Requests\CreateAdminRequest;
 use App\Http\Requests\UpdateAdminRequest;
 use App\Models\User;
 use App\Models\Role;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
+    use CheckingResults;
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $residents = User::join('roles', 'users.id', '=', 'roles.user_id')
+        $admins = User::join('roles', 'users.id', '=', 'roles.user_id')
         ->where('role', 'admin')
         ->get();
 
-        return response()->json($residents);
+        return response()->json($admins);
     }
 
     /**
@@ -37,11 +41,11 @@ class AdminController extends Controller
     {
         $validate = $request->validated();
 
-        // $resident = $this->user()->create($validate);
-
         $role = $validate['role'];
 
         unset($validate['role'] );
+
+        DB::beginTransaction();
 
         $resident = User::create($validate);
 
@@ -52,6 +56,8 @@ class AdminController extends Controller
              'user_id' => $resident_id,
              ]
         );
+
+        DB::commit();
 
         $result = $this->checkingResults(
         $add_role, 
@@ -65,14 +71,11 @@ class AdminController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $email)
+    public function show(string $id)
     {
-        $admin = User::where('email', $email)
-        ->where(function ($query) {
-            $query->where('role', 'admin')
-                ->orWhere('role', 'both');
-        })
-        ->get();
+        $admin = User::find($id);
+
+        $admin['roles'] = $admin->roles()->pluck('role');
 
         return response()->json($admin);
     }
@@ -88,33 +91,32 @@ class AdminController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateAdminRequest $request, string $email)
+    public function update(UpdateAdminRequest $request, string $id)
     {
-        $admin_id = User::where('email', $email)
-        ->where(function ($query) {
-            $query->where('role', 'admin')
-                ->orWhere('role', 'both');
-        })
-        ->first()
-        ->id;
+        $updated = User::where("id", $id)->update($request->all());
 
-        $updated = User::where("id", $admin_id)->update( $request->all() );
+        $result = $this->checkingResults(
+            $updated,
+            'The admin account has been updated successfully',
+            'The update of admin account failed'
+        );
 
-        return response()->json($admin_id);
+        return $result;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $email)
+    public function destroy(string $id)
     {
-        $admin = User::where('email', $email)
-        ->where(function ($query) {
-            $query->where('role', 'admin')
-                ->orWhere('role', 'both');
-        })
-        ->delete();
+        $delete = User::find($id)->delete();
 
-        return response()->json($admin);
+        $result = $this->checkingResults(
+            $delete,
+            'The admin account is deleted successfully',
+            'Failed to delete the admin account'
+        );
+
+        return $result;
     }
 }

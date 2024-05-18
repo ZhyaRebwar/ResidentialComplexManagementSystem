@@ -46,8 +46,6 @@ class ResidentController extends Controller
     {
         $validate = $request->validated();
 
-        // $resident = $this->user()->create($validate);
-
         $role = $validate['role'];
 
         unset($validate['role'] );
@@ -79,15 +77,13 @@ class ResidentController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $user)
+    public function show(string $id)
     {
-        
-        // $resident = User::where('email', $email)
-        //     ->where('role', 'user')
-        //     ->orWhere('role', 'both')
-        //     ->get();
+        $resident = User::find($id);
 
-        return json_encode([ $user ]);
+        $resident['roles'] = $resident->roles()->pluck('role');
+
+        return response()->json($resident);
     }
 
     /**
@@ -101,16 +97,17 @@ class ResidentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateResidentRequest $request, string $email)
+    public function update(UpdateResidentRequest $request, string $id)
     {
-        $resident_id = User::where('role', 'user')
-        ->orWhere('role', 'both')
-        ->firstWhere('email', $email)
-        ->id;
+        $updated = User::where("id", $id)->update($request->all());
 
-        $updated = User::where('id', $resident_id)->update( $request->all() );
+        $result = $this->checkingResults(
+            $updated,
+            'The resident account has been updated successfully',
+            'The update of resident account failed'
+        );
 
-        return response()->json([ $updated ]);
+        return $result;
     }
 
     /**

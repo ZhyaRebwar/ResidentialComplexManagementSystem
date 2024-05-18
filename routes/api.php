@@ -41,6 +41,12 @@ Route::middleware('auth:sanctum')
     ->apiResource('residents', ResidentController::class)
     ->only(['store', 'index', 'destroy', 'update']);
 
+// managing admins
+Route::apiResource('admins', AdminController::class)
+    ->only(['store', 'show', 'index', 'destroy', 'update']);
+    // ->middleware('auth:sanctum')
+
+
 Route::middleware('auth:sanctum')
     ->controller(ResidentController::class)
     ->prefix('residents')
@@ -56,10 +62,6 @@ Route::apiResource('protests/user', UserProtestController::class)
 Route::apiResource('repairments/user', UserRepairmentController::class)
     ->only(['store', 'index', 'destroy', 'update']);
 
-// managing admins
-Route::apiResource('admins', AdminController::class)
-    ->only(['store', 'show', 'index', 'destroy', 'update']);
-    // ->middleware('auth:sanctum')
 
 
 // login & register admins

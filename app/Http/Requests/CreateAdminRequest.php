@@ -37,7 +37,7 @@ class CreateAdminRequest extends FormRequest
             'phone_number'=> 'string|required',
             'age'=> 'numeric|required|min:15',
             'job_title'=> 'required',
-            'role'=> 'required|in:admin,both',
+            'role'=> 'required|in:admin,resident,employee',
         ];
     }
 }
