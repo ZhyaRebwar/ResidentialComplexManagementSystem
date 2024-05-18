@@ -80,10 +80,10 @@ class RoleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $email)
+    public function show(string $id)
     {
         $user_roles = Role::join('users', 'roles.user_id', '=', 'users.id')
-        ->where('email', $email)
+        ->where('users.id', $id)
         ->pluck('role');
 
         return response()->json( $user_roles);
@@ -111,20 +111,17 @@ class RoleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(DeleteRoleRequest $request, string $email)
+    public function destroy(DeleteRoleRequest $request, string $id)
     {
         $validate = $request->validated();
 
-        $user_id = User::where('email', $email)
-            ->first()->id;
-        
-        $role = Role::where('user_id', $user_id)
-            ->where('role', $validate)
-            ->first()
-            ->delete();
+        $delete = Role::where('user_id', $id)
+                        ->where('role', $validate)
+                        ->first()
+                        ->delete();
             
         $result = $this->checkingResults(
-            $role,
+            $delete,
             "The role has been deleted for this user",
             "The role has not been deleted for this user"
         );

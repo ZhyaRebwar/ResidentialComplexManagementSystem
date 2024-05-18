@@ -21,6 +21,16 @@ class AdminController extends Controller
     {
         $admins = User::join('roles', 'users.id', '=', 'roles.user_id')
         ->where('role', 'admin')
+        ->select([
+            'users.id as id',
+            'name',
+            'email',
+            'phone_number',
+            'age',
+            'job_title',
+            'users.created_at',
+            'users.updated_at',
+             ])
         ->get();
 
         return response()->json($admins);
