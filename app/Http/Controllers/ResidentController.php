@@ -56,9 +56,6 @@ class ResidentController extends Controller
     {
         $validate = $request->validated();
 
-        $role = $validate['role'];
-
-        unset($validate['role'] );
 
         DB::beginTransaction();
 
@@ -67,7 +64,7 @@ class ResidentController extends Controller
         $resident_id = $resident->id;
 
         $add_role = Role::create(
-            ['role' => $role,
+            ['role' => 'resident',
              'user_id' => $resident_id,
              ]
         );

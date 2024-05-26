@@ -26,13 +26,14 @@ class CreateResidentRequest extends FormRequest
             $user = Auth::user();
 
            // Check if the user has an "admin" role
-            $isAdmin = $user->roles()->where('role', 'admin')->exists();
+            $isAdmin = $user->roles->where('role', 'admin');
 
+            
             if ($isAdmin) {
                 // User has admin role
                 return true;
             }
-            }
+        }
         return false;
 
 
