@@ -135,3 +135,6 @@ Route::controller(UserMonthlyPaymentController::class)
 
 Route::apiResource('repairments/employee', EmployeeRepairmentController::class)
         ->only(['index', 'update', 'destroy']);
+
+Route::apiResource('protest', ProtestController::class)
+        ->only(['index', 'update', 'delete']);
