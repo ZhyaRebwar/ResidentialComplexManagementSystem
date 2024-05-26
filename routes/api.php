@@ -84,10 +84,10 @@ Route::apiResource('houses', HouseController::class)
     ->only(['index', 'update', 'store', 'show', 'destroy']);
 
 Route::apiResource('apartments', ApartmentController::class)
-    ->only(['index', 'store']);
+    ->only(['index', 'store', 'update']);
 
 //to update an apartment
-Route::put('/apartments/{building}/{floor}/{apartment}', [ApartmentController::class, 'update'] );
+// Route::put('/apartments/{building}/{floor}/{apartment}', [ApartmentController::class, 'update'] );
 
 //to delete an apartment
 Route::delete('/apartments/{building}/{floor}/{apartment}', [ApartmentController::class, 'destroy'] );

@@ -78,21 +78,11 @@ class ApartmentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateApartmentRequest $request, string $building, int $floor, string $apartment_name)
+    public function update(UpdateApartmentRequest $request, string $id)
     {
         $apartment = $request->validated();
 
-        $apartment_id = Apartment::whereRelation(
-                'building', 'name', $building
-            )
-            ->where(
-                'floor', $floor
-            )
-            ->where(
-                'name', $apartment_name
-            )->first()->id;
-
-        $update = Apartment::where('id', $apartment_id)->update($apartment);
+        $update = Apartment::where('id', $id)->update($apartment);
 
         $result = $this->checkingResults($update,'Apartment updated successfully', 'Apartment update failed');
 
