@@ -27,7 +27,8 @@ class HouseController extends Controller
             'users.name as owner_name',
             'houses.created_at',
             'houses.updated_at',
-        ]);
+        ])
+        ->get();
 
         return response()->json($houses);
     }
