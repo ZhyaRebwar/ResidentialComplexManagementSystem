@@ -23,7 +23,7 @@ class ProtestController extends Controller
             'description',
             'compliant',
             'status',
-            'users.name as made by',
+            'users.name as made_by',
             'location',
             'protests.created_at',
             'protests.updated_at',

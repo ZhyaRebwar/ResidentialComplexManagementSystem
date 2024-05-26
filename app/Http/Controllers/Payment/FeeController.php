@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ControllersTraits\CheckingResults;
 use App\Http\Controllers\ControllersTraits\GetValues;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class FeeController extends Controller
@@ -55,6 +56,21 @@ class FeeController extends Controller
 
             return $result;
         }
+    }
+
+    public function update(Request $request, string $id)
+    {
+        $request->only(['amount']);
+
+        $update = Fee::where('id', $id)->update([ 'amount' => $request->amount ]);
+
+        $result = $this->checkingResults(
+            $update,
+            'The fee has been updated',
+            'Failed to update the fee'
+        );
+
+        return $result;
     }
 
     public function destroy(string $id)
