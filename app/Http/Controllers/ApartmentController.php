@@ -92,17 +92,9 @@ class ApartmentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $building, int $floor, string $apartment_name)
+    public function destroy(string $id)
     {
-        $apartment = Apartment::whereRelation(
-            'building', 'name', $building
-        )
-        ->where(
-            'floor', $floor
-        )
-        ->where(
-            'name', $apartment_name
-        )->first()->delete();
+        $apartment = Apartment::find($id)->delete();
 
         $result = $this->checkingResults($apartment, 'Apartment deleted successfully','Apartment delete failed');
 
