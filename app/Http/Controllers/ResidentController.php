@@ -133,9 +133,8 @@ class ResidentController extends Controller
 
 
     // for the users only
-    public function user()
+    public function self()
     {
-
         if(Auth::check())
         {   
             //get the user id.

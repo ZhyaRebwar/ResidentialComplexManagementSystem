@@ -8,6 +8,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ApartmentController;
 use App\Http\Controllers\BuildingController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HouseController;
 use App\Http\Controllers\Payment\FeeController;
 use App\Http\Controllers\Payment\PropertyFeesConroller;
@@ -16,6 +17,7 @@ use App\Http\Controllers\Protest\ProtestController;
 use App\Http\Controllers\Protest\UserProtestController;
 use App\Http\Controllers\Repairment\EmployeeRepairmentController;
 use App\Http\Controllers\RoleController;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,18 +45,19 @@ Route::middleware('auth:sanctum')
 
 // managing admins
 Route::apiResource('admins', AdminController::class)
-    ->only(['store', 'show', 'index', 'destroy', 'update']);
+    ->only(['store', 'index', 'destroy', 'update']);
     // ->middleware('auth:sanctum')
 
 
 Route::middleware('auth:sanctum')
     ->controller(ResidentController::class)
-    ->prefix('residents')
+    ->prefix('resident')
     ->group( function () {
-        Route::get('/self', 'user');
+        Route::get('/self', 'self');
         Route::put('/self/update', 'editProfileUser');
         Route::get('/self/residential-property', 'userResidentialProperty');
     });
+
 
 Route::apiResource('protests/user', UserProtestController::class)
     ->only(['store', 'index', 'destroy', 'update']);
@@ -132,3 +135,7 @@ Route::apiResource('repairments/employee', EmployeeRepairmentController::class)
 
 Route::apiResource('protest', ProtestController::class)
         ->only(['index', 'update', 'destroy']);
+
+Route::apiResource('dashboard', DashboardController::class)
+        ->only(['index']);
+        
