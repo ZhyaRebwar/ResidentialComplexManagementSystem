@@ -27,12 +27,11 @@ class ApartmentController extends Controller
                 'apartments.floor as floor',
                 'apartments.name as name',
                 'buildings.name as building_name',
-                'users.name as owner_id',
+                'users.name as owner_name',
                 'apartments.created_at',
                 'apartments.updated_at',
             ])
             ->get();
-
 
         return response()->json($apartment);
     }

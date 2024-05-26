@@ -20,7 +20,14 @@ class HouseController extends Controller
      */
     public function index()
     {
-        $houses = $this->getAllValues(House::class);
+        $houses = House::leftJoin('users', 'houses.owner_id', '=', 'users.id')
+        ->select([
+            'houses.id as id',
+            'houses.name as name',
+            'users.name as owner_name',
+            'houses.created_at',
+            'houses.updated_at',
+        ]);
 
         return response()->json($houses);
     }
