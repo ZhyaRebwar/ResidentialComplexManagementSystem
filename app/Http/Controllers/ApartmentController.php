@@ -20,7 +20,19 @@ class ApartmentController extends Controller
      */
     public function index()
     {
-        $apartment = $this->getAllValues(Apartment::class);
+        $apartment = Apartment::leftJoin('users', 'apartments.owner_id', '=', 'users.id')
+            ->leftJoin('buildings', 'apartments.building_id', '=', 'buildings.id')
+            ->select([
+                'apartments.id as id',
+                'apartments.floor as floor',
+                'apartments.name as name',
+                'buildings.name as building_name',
+                'users.name as owner_id',
+                'apartments.created_at',
+                'apartments.updated_at',
+            ])
+            ->get();
+
 
         return response()->json($apartment);
     }

@@ -86,12 +86,6 @@ Route::apiResource('houses', HouseController::class)
 Route::apiResource('apartments', ApartmentController::class)
     ->only(['index', 'store', 'update', 'destroy']);
 
-//to update an apartment
-// Route::put('/apartments/{building}/{floor}/{apartment}', [ApartmentController::class, 'update'] );
-
-//to delete an apartment
-// Route::delete('/apartments/{building}/{floor}/{apartment}', [ApartmentController::class, 'destroy'] );
-
 // to get all apartments from a building
 Route::get('/apartments/{building}', [ApartmentController::class,'building_apartments'] );
 
