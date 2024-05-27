@@ -37,8 +37,8 @@ class DashboardController extends Controller
             'apartment_number' => $no_apartments,
             'building_number' => $no_buildings,
             'user_number' => $no_user,
-            'no_residents' => $no_residents,
-            'no_admin' => $no_admin
+            'residents_number' => $no_residents,
+            'admin_number' => $no_admin
         ]);
     }
 
