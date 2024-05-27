@@ -108,10 +108,12 @@ Route::delete('/roles/{email}', [RoleController::class,'destroy'] );
 
 //fees
 Route::apiResource('fees', FeeController::class)
-        ->only(['index', 'store', 'destroy']);
+        ->only(['index', 'store', 'update', 'destroy']);
+
 
 Route::apiResource('property-fees', PropertyFeesConroller::class)
         ->only(['store', 'index', 'destroy', 'update']);
+        
 Route::get('property-fees/property', [PropertyFeesConroller::class, 'property_fees']);
 
 //property fees controller
