@@ -54,11 +54,58 @@ class DashboardController extends Controller
         ->orderBy('year', 'asc')
         ->get();
 
-
         // Format the data for easy use in your view or response
         $formattedCounts = [];
         foreach ($protestCounts as $count) {
             $formattedCounts[] = [
+                'year' => $count->year,
+                'month' => $count->month,
+                'protest_count' => $count->protest_count
+            ];
+        }
+
+        //-------------------------------------------------------------
+        $startDateChart2 = now()->subMonths(7)->startOfMonth();
+        $endDateChart2 = now()->startOfMonth();
+
+        // Query the database to get protest counts grouped by month and year
+        $protestCountsChart2 = DB::table('protests')
+            ->select(
+                DB::raw('YEAR(created_at) as year'),
+                DB::raw('MONTH(created_at) as month'),
+                DB::raw('COUNT(*) as protest_count')
+            )
+            ->whereBetween('created_at', [$startDateChart2, $endDateChart2])
+            ->groupBy('year', 'month')
+            ->orderBy('year', 'asc')
+            ->get();
+
+        // Format the response
+        $formattedCountsChart2Protest = [];
+        foreach ($protestCountsChart2 as $count) {
+            $formattedCountsChart2Protest[] = [
+                'year' => $count->year,
+                'month' => $count->month,
+                'protest_count' => $count->protest_count
+            ];
+        }
+
+        // Query the database to get protest counts grouped by month and year
+        $MaintainanceCountsChart2 = DB::table('repairments')
+            ->select(
+                DB::raw('YEAR(created_at) as year'),
+                DB::raw('MONTH(created_at) as month'),
+                DB::raw('COUNT(*) as protest_count')
+            )
+            ->whereBetween('created_at', [$startDateChart2, $endDateChart2])
+            ->groupBy('year', 'month')
+            ->orderBy('year', 'asc')
+            ->get();
+
+        // Format the response
+        $formattedCountsChart2Maintainance = [];
+        foreach ($MaintainanceCountsChart2 as $count) {
+            $formattedCountsChart2Protest[] = [
                 'year' => $count->year,
                 'month' => $count->month,
                 'protest_count' => $count->protest_count
@@ -74,7 +121,9 @@ class DashboardController extends Controller
             'user_number' => $no_user,
             'residents_number' => $no_residents,
             'admin_number' => $no_admin,
-            'two_years_protests' => $formattedCounts
+            'two_years_protests' => $formattedCounts,
+            'protest_7_months' => $formattedCountsChart2Protest,
+            'maintainance_7_months' => $formattedCountsChart2Maintainance,
         ]);
     }
 
